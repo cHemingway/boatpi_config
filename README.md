@@ -1,5 +1,4 @@
 ## Boatpi Config
-
 Configuration for an autonomous boat's rasbperry pi zero 2W using pyinfra
 
 Likely not useful to anyone as is, but you can use this as inspiration maybe
@@ -8,9 +7,10 @@ Assumes you already have raspberry pi OS installed and SSH access, nothing else
 
 ### Features
 - [X] Sets up low latency streaming using mediamtx
-- [] Sets up mavlink_router
-- [] Sets up 4G modem
-- [] Sets up tailscale for NAT punching
+- [X] Disables bluetooth to free up PL011 UART for flight controller
+- [X] Sets up mavlink_router
+- [ ] Sets up 4G modem
+- [ ] Sets up tailscale for NAT punching
 
 ### Usage
 - Install pyinfra on your local machine (e.g. `uvx tool install pyinfra`)
