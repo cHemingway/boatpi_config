@@ -7,9 +7,12 @@ Assumes you already have raspberry pi OS installed and SSH access, nothing else
 
 ### Features
 - [X] Sets up low latency streaming using mediamtx
+    - [ ] Logs video locally
 - [X] Disables bluetooth to free up PL011 UART for flight controller
 - [X] Sets up mavlink_router
-- [ ] Sets up 4G modem
+    - [ ] Turns on local flight logs
+- [X] Sets up 4G modem
+    - [ ] Change to use pyinfra data file instead of hardcode APN/DNS servers
 - [ ] Sets up tailscale for NAT punching
 
 ### Usage
@@ -19,3 +22,4 @@ Assumes you already have raspberry pi OS installed and SSH access, nothing else
 
 ### Notes
 - I am using 1password to manage my SSH keys, but this doesn't work so I have to use password auth (specify ssh_password in inventory.py, and enable it on the device). This might be related to https://github.com/paramiko/paramiko/issues/2370 as the error is the same.
+- Inspired by Maverick's use of puppet, but no shared code. Commands in [raspberry.pp](https://github.com/goodrobots/maverick/blob/stable/manifests/maverick-modules/maverick_hardware/manifests/raspberry.pp) would have been a good source of inspiration had I seen them in advance

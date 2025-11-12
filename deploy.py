@@ -142,3 +142,32 @@ systemd.service(
     daemon_reload=mavlink_service_changed,
     _sudo=True,
 )
+
+# Check if usb0 exists, if not, send the atcommands to create it
+usb0_interface = host.get_fact(facts.hardware.NetworkDevices).get("usb0")
+if not usb0_interface:
+    server.shell(
+        name="Switch LTE module to use RNDIS mode",
+        # Send command, wait for the module to restart
+        commands=[
+            'echo -e "AT+CUSBPIDSWITCH=9011,1,1\r\n" | tee /dev/ttyUSB2',
+            'bash -c \'for i in {1..10}; do if ip link show usb0 &>/dev/null; then exit 0; else sleep 3; fi; done; exit 1\''
+        ],
+        _sudo=True,
+    )
+
+
+#See if usb0 has an ip address, if not, setup network manager for it
+usb0_ip = host.get_fact(facts.hardware.Ipv4Addrs).get("usb0")
+if not usb0_ip:
+    # This was the only command that I needed, but I don't know why only this was required
+    # NMCLI then can't actually bring the network up, but it seems to work anyway?
+    server.shell(
+        name="Set the APN and DNS for the LTE connection",
+        commands=[
+            "nmcli c modify ttyUSB2 gsm.apn mob.asm.net",
+            'nmcli c modify ttyUSB2 ipv4.dns "1.1.1.1 1.0.0.1"',
+            'nmcli c modify ttyUSB2 ipv4.ignore-auto-dns yes'
+        ],
+        _sudo=True,
+    )
