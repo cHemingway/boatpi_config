@@ -171,3 +171,11 @@ if not usb0_ip:
         ],
         _sudo=True,
     )
+
+# Install mosh for better remote connections over LTE
+apt.packages(
+    name="Install mosh for better remote connections",
+    packages=["mosh"],
+    update=True,
+    _sudo=True,
+)
