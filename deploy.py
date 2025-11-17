@@ -143,24 +143,27 @@ systemd.service(
     _sudo=True,
 )
 
-# Check if usb0 exists, if not, send the atcommands to create it
-usb0_interface = host.get_fact(facts.hardware.NetworkDevices).get("usb0")
-if not usb0_interface:
+# Check if wwan0 exists, if not, send the atcommands to create it
+# We use NDIS mode rather than RNDIS mode as it seems to work better with NetworkManager
+# RNDIS gives PPP errors when bringing the connection up with nmcli
+wwan0_exists = host.get_fact(facts.hardware.NetworkDevices).get("wwan0")
+if not wwan0_exists:
     server.shell(
-        name="Switch LTE module to use RNDIS mode",
+        name="Switch LTE module to use NDIS mode",
         # Send command, wait for the module to restart
         commands=[
-            'echo -e "AT+CUSBPIDSWITCH=9011,1,1\r\n" | tee /dev/ttyUSB2',
-            'bash -c \'for i in {1..10}; do if ip link show usb0 &>/dev/null; then exit 0; else sleep 3; fi; done; exit 1\''
+            'echo -e "AT+CUSBPIDSWITCH=9001,1,1\r\n" | tee /dev/ttyUSB2',
+            'bash -c \'for i in {1..10}; do if ip link show wwan0 &>/dev/null; then exit 0; else sleep 3; fi; done; exit 1\''
         ],
         _sudo=True,
     )
 
 
-#See if usb0 has an ip address, if not, setup network manager for it
+#See if wwan0 has an ip address, if not, setup network manager for it
+# Might also be called usb0 depending on mode
 # Source: https://support.lenovo.com/gb/en/solutions/HT513050
-usb0_ip = host.get_fact(facts.hardware.Ipv4Addrs).get("usb0")
-if not usb0_ip:
+wwan0_ip = host.get_fact(facts.hardware.Ipv4Addrs).get("wwan0")
+if not wwan0_ip:
     # See https://wimsworld.wordpress.com/2023/12/21/revisiting-the-sim7600g-h-4g-hat-using-bookworm/
     # We need to delete any existing gsm connection first, then create a new one with the correct APN
     server.shell(
