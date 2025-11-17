@@ -158,16 +158,17 @@ if not usb0_interface:
 
 
 #See if usb0 has an ip address, if not, setup network manager for it
+# Source: https://support.lenovo.com/gb/en/solutions/HT513050
 usb0_ip = host.get_fact(facts.hardware.Ipv4Addrs).get("usb0")
 if not usb0_ip:
-    # This was the only command that I needed, but I don't know why only this was required
-    # NMCLI then can't actually bring the network up, but it seems to work anyway?
+    # See https://wimsworld.wordpress.com/2023/12/21/revisiting-the-sim7600g-h-4g-hat-using-bookworm/
+    # We need to delete any existing gsm connection first, then create a new one with the correct APN
     server.shell(
-        name="Set the APN and DNS for the LTE connection",
+        name="Set the APN for the LTE connection",
         commands=[
-            "nmcli c modify ttyUSB2 gsm.apn mob.asm.net",
-            'nmcli c modify ttyUSB2 ipv4.dns "1.1.1.1 1.0.0.1"',
-            'nmcli c modify ttyUSB2 ipv4.ignore-auto-dns yes'
+            "nmcli con del gsm",
+            "nmcli con add type gsm ifname '*' con-name 'gsm' apn 'mob.asm.net' connection.autoconnect yes",
+            "nmcli con up gsm"
         ],
         _sudo=True,
     )
@@ -176,6 +177,6 @@ if not usb0_ip:
 apt.packages(
     name="Install mosh for better remote connections",
     packages=["mosh"],
-    update=True,
+    update=False, # Speeds up
     _sudo=True,
 )

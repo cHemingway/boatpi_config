@@ -21,7 +21,8 @@ Assumes you already have raspberry pi OS installed and SSH access, nothing else
 
 ### Issues
 - Hardcodes APN/DNS instead of using pyinfra data file
-- WebRTC takes a very long time to connect over LTE
+- WebRTC takes a very long time to connect over LTE, sometimes doesn't work at all
+- Non WebRTC streaming methods have very high (dozens of seconds) of lag
 - LTE is the default route if available even when WiFi comes back, which makes programs that download things (e.g. apt) download over LTE instead which is much slower
 
 
