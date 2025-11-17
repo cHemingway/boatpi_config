@@ -576,9 +576,9 @@ pathDefaults:
   # Whether this is a secondary stream.
   rpiCameraSecondary: false
   # Width of frames.
-  rpiCameraWidth: 1280
+  rpiCameraWidth: 960
   # Height of frames.
-  rpiCameraHeight: 720
+  rpiCameraHeight: 540
   # Flip horizontally.
   rpiCameraHFlip: false
   # Flip vertically.
@@ -650,7 +650,7 @@ pathDefaults:
   # Period between IDR frames (when codec is hardwareH264 or softwareH264).
   rpiCameraIDRPeriod: 60
   # Bitrate (when codec is hardwareH264 or softwareH264).
-  rpiCameraBitrate: 3000000
+  rpiCameraBitrate: 1000000
   # Hardware H264 profile (baseline, main or high) (when codec is hardwareH264).
   rpiCameraHardwareH264Profile: main
   # Hardware H264 level (4.0, 4.1 or 4.2) (when codec is hardwareH264).
