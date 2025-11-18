@@ -22,6 +22,7 @@ Assumes you already have raspberry pi OS installed and SSH access, nothing else
 ### Using 
 - For low (ish) latency playback, run `ffplay -fflags nobuffer -framedrop -flags low_delay rtsp://<device_tailscale_address>:8554/cam`
     - This is down to < 1 second over my rural LTE connection, which might be the limit
+- Or even lower, but a bit glitchier (as `setpts=0` displays frames as soon as it has them, so framerate can be higher than 30fps) `ffplay -flags low_delay -vf setpts=0 -probesize 32 rtsp://<device>:8854/cam`
 
 
 ### Issues
