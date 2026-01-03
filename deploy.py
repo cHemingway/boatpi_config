@@ -4,9 +4,31 @@ import pyinfra.facts as facts
 from pyinfra.operations import apt, files, pip, server, systemd
 from pyinfra.facts.files import Directory
 
+from operations.readwrite_partition import ensure_readwrite_partition
+
 # Check that we are on the correct architecture
 assert host.get_fact(facts.server.Arch) == "aarch64", "This deploy script is intended for aarch64 only"
 
+apt.packages(
+    name="Install storage tooling for partition management",
+    packages=["parted"],
+    update=False,
+    _sudo=True,
+)
+
+
+# Dedicated video partition/mount configuration
+VIDEO_PARTITION_LABEL = "boatpi-video"
+VIDEO_MOUNT_POINT = "/var/lib/boatpi-video"
+VIDEO_OS_RESERVE_GB = 6
+VIDEO_MIN_GB = 2
+
+ensure_readwrite_partition(
+    label=VIDEO_PARTITION_LABEL,
+    mount_point=VIDEO_MOUNT_POINT,
+    reserve_gb=VIDEO_OS_RESERVE_GB,
+    min_gb=VIDEO_MIN_GB,
+)
 
 # Install mediamtx
 files.directory(

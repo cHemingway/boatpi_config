@@ -770,6 +770,8 @@ paths:
 
   cam:
     source: rpiCamera
+    record: yes
+    recordPath: /var/lib/boatpi-video/%path/%Y-%m-%d_%H-%M-%S
 
   # Settings under path "all_others" are applied to all paths that
   # do not match another entry.

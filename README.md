@@ -23,6 +23,12 @@ Assumes you already have raspberry pi OS installed and SSH access, nothing else
 - Create an inventory.py of form `hosts=["your_rpi_address"]`
 - Run `pyinfra inventory.py deploy.py`
 
+### Video Storage Partition
+- `deploy.py` now provisions a dedicated `boatpi-video` partition on the primary disk if unallocated space exists. The script leaves ~6 GB untouched for the OS and only proceeds when at least 2 GB remain for recordings.
+- The partition is formatted ext4, mounted at `/var/lib/boatpi-video`, and added to `/etc/fstab` so it comes up automatically after reboots.
+- `mediamtx` recordings write to `/var/lib/boatpi-video/<path>/<timestamp>`, and the systemd unit requires the mount before starting.
+- If no free space is available (common when the root partition already fills the card), the deploy will exit with an error so you can grow/shrink partitions manually before re-running.
+
 ### Using 
 - For low (ish) latency playback, run `ffplay -fflags nobuffer -framedrop -flags low_delay rtsp://<device_tailscale_address>:8554/cam`
     - This is down to < 1 second over my rural LTE connection, which might be the limit

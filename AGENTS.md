@@ -9,11 +9,13 @@
 - Serial/camera setup flips `/boot/firmware/config.txt` flags (disable auto detect, add `dtoverlay=imx708`, `dtoverlay=disable-bt`); when any of these mutations change, pyinfra runs `raspi-config` commands and schedules a reboot, so only touch that block if you expect downtime.
 - MAVLink routing is provided by a downloaded static binary plus [configs/mavlink-router/main.conf](configs/mavlink-router/main.conf) and [configs/mavlink-router.service](configs/mavlink-router.service); remember the playbook restarts the service only when config/service files change.
 - LTE prep checks for `wwan0`; if absent it sends `AT+CUSBPIDSWITCH` via `/dev/ttyUSB2`, then rewrites the NetworkManager `gsm` connection to force the hard-coded APN `mob.asm.net`. Treat these commands as the canonical way this repo provisions the SIM7600 HAT.
+- Video storage: deployment auto-creates an ext4 partition labeled `boatpi-video` (if the disk has free space), leaves ~6 GB unallocated for the OS, mounts it at `/var/lib/boatpi-video`, and fstab+systemd ensure the mount exists before mediamtx starts.
 
 ### Streaming Stack Expectations
 - [configs/mediamtx.yml](configs/mediamtx.yml) keeps almost the full upstream example but overrides key sections: WebRTC/HLS/RTSP are all on, ICE servers point at Google STUN, and the sole path `cam` uses `source: rpiCamera` with HDR enabled. Stick to these conventions so pyinfra copies the file verbatim.
 - Low-latency viewing instructions in [README.md](README.md) rely on the `cam` path and ports 8554/8888/8889; update that doc if you change port mappings or add authentication.
 - Systemd units under [configs/*.service](configs) are minimal (no `WantedBy` extras, run as root). If you add new daemons, follow the same pattern: stage the unit file in configs, push with `files.put`, and gate restarts on `daemon_reload` flags.
+- mediamtx recordings write to `/var/lib/boatpi-video`, so keep that mount path consistent when extending configs; `mediamtx.service` uses `RequiresMountsFor` to delay startup until the partition is available.
 
 ### Telemetry & Networking
 - [scripts/signal_monitor.py](scripts/signal_monitor.py) polls `nmcli` and `mmcli`, then emits MAVLink `NAMED_VALUE_FLOAT` metrics (`wifi_sig`, `lte_*`) over UDP via `pymavlink`; any change that adds metrics should remain under 10-char names to satisfy MAVLink constraints.
