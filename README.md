@@ -5,7 +5,7 @@ Likely not useful to anyone as is, but you can use this as inspiration maybe
 
 Assumes you already have raspberry pi OS installed and SSH access, nothing else
 
-### Features
+### Features / TODO
 - [X] Sets up low latency streaming using mediamtx
     - [ ] Logs video locally
 - [X] Disables bluetooth to free up PL011 UART for flight controller
@@ -13,9 +13,12 @@ Assumes you already have raspberry pi OS installed and SSH access, nothing else
     - [ ] Turns on local flight logs
 - [X] Sets up 4G Hat
 - [ ] Sets up tailscale for NAT punching
+- [ ] Push 4G signal to mavlink-router [using mmcli](https://unix.stackexchange.com/questions/586528/gsm-modem-get-signal-strength)
+- [ ] Set most of filesystem to readonly
+- [ ] Add a way of turning off the pi that isn't via SSH, pushbutton?
 
 ### Deployment
-- Install pyinfra on your local machine (e.g. `uvx tool install pyinfra`)
+- Install pyinfra on your local machine (e.g. `uvx pyinfra`)
 - Create an inventory.py of form `hosts=["your_rpi_address"]`
 - Run `pyinfra inventory.py deploy.py`
 
