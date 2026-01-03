@@ -1,0 +1,25 @@
+[Unit]
+Description=WiFi and LTE signal strength publisher (MAVLink)
+Requires=network-online.target NetworkManager.service ModemManager.service
+After=network-online.target NetworkManager.service ModemManager.service mavlink-router.service
+
+[Service]
+Type=simple
+ExecStart=/opt/boatpi-signal/venv/bin/python /opt/boatpi-signal/signal_monitor.py \
+	--endpoint udpout:127.0.0.1:14560 \
+	--poll-interval 5 \
+	--modem-id any \
+		--mav-sys-id 1 \
+	--mav-comp-id 191 \
+	--wifi-metric-name wifi_sig \
+	--lte-prefix lte_
+Restart=on-failure
+RestartSec=5
+User=root
+Group=root
+Environment=PYTHONUNBUFFERED=1
+# Allow DNS and D-Bus access to nmcli/mmcli
+AmbientCapabilities=CAP_NET_ADMIN
+
+[Install]
+WantedBy=multi-user.target

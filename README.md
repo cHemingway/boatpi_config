@@ -13,8 +13,8 @@ Assumes you already have raspberry pi OS installed and SSH access, nothing else
 - [X] Sets up mavlink_router
     - [ ] Turns on local flight logs
 - [X] Sets up 4G Hat
+- [X] Publishes Wi-Fi/LTE signal to MAVLink (127.0.0.1:14560)
 - [ ] Sets up tailscale for NAT punching
-- [ ] Push 4G signal to mavlink-router [using mmcli](https://unix.stackexchange.com/questions/586528/gsm-modem-get-signal-strength)
 - [ ] Set most of filesystem to readonly
 - [ ] Add a way of turning off the pi that isn't via SSH, pushbutton?
 
@@ -28,6 +28,15 @@ Assumes you already have raspberry pi OS installed and SSH access, nothing else
     - This is down to < 1 second over my rural LTE connection, which might be the limit
 - Or even lower, but a bit glitchier (as `setpts=0` displays frames as soon as it has them, so framerate can be higher than 30fps) `ffplay -flags low_delay -vf setpts=0 -probesize 32 rtsp://<device>:8854/cam`
 
+### Signal strength -> MAVLink
+
+- A systemd service `signal-monitor.service` polls every ~5s and sends MAVLink `NAMED_VALUE_FLOAT` messages over UDP to `127.0.0.1:14560` (arguments passed directly in the unit ExecStart; see file for overrides).
+- Metrics:
+    - `wifi_sig` (0-100% from `nmcli` of the active Wi‑Fi connection)
+    - `lte_rssi`, `lte_rsrp`, `lte_rsrq`, `lte_snr` (from `mmcli --signal-get`, in dBm/dB)
+- The service depends on NetworkManager + ModemManager and runs from a venv at `/opt/boatpi-signal/venv` with `pymavlink` installed via pip.
+- On target: `sudo systemctl status signal-monitor` or `journalctl -u signal-monitor -f`.
+
 
 ### Issues
 - Hardcodes APN/DNS instead of using pyinfra data file
@@ -39,3 +48,4 @@ Assumes you already have raspberry pi OS installed and SSH access, nothing else
 ### Notes
 - I am using 1password to manage my SSH keys, but this doesn't work so I have to use password auth (specify ssh_password in inventory.py, and enable it on the device). This might be related to https://github.com/paramiko/paramiko/issues/2370 as the error is the same.
 - Inspired by Maverick's use of puppet, but no shared code. Commands in [raspberry.pp](https://github.com/goodrobots/maverick/blob/stable/manifests/maverick-modules/maverick_hardware/manifests/raspberry.pp) would have been a good source of inspiration had I seen them in advance
+- Signal monitor script was written by GPT-5.1-Codex and Copilot

@@ -1,7 +1,8 @@
 # Run this as pyinfra deploy.py
 from pyinfra.context import host
 import pyinfra.facts as facts
-from pyinfra.operations import apt, files, server, systemd
+from pyinfra.operations import apt, files, pip, server, systemd
+from pyinfra.facts.files import Directory
 
 # Check that we are on the correct architecture
 assert host.get_fact(facts.server.Arch) == "aarch64", "This deploy script is intended for aarch64 only"
@@ -198,5 +199,65 @@ apt.packages(
     name="Install mosh for better remote connections",
     packages=["mosh"],
     update=False, # Speeds up
+    _sudo=True,
+)
+
+# Ensure venv tooling is present
+apt.packages(
+    name="Install python3-venv for signal monitor",
+    packages=["python3-venv"],
+    update=False,
+    _sudo=True,
+)
+
+# Deploy Wi-Fi/LTE signal monitor daemon
+files.directory(
+    name="Create signal monitor directory",
+    path="/opt/boatpi-signal",
+    mode="755",
+    user=host.get_fact(facts.server.User),
+    _sudo=True,
+)
+
+signal_monitor_updated = files.put(
+    name="Upload signal monitor script",
+    src="scripts/signal_monitor.py",
+    dest="/opt/boatpi-signal/signal_monitor.py",
+    mode="755",
+    _sudo=True,
+).changed
+
+venv_exists = host.get_fact(facts.files.Directory, path="/opt/boatpi-signal/venv")
+venv_created = False
+if not venv_exists:
+    venv_created = server.shell(
+        name="Create virtualenv for signal monitor",
+        commands=["python3 -m venv /opt/boatpi-signal/venv"],
+        _sudo=True,
+    ).changed
+
+pymavlink_installed = pip.packages(
+    name="Install pymavlink in virtualenv",
+    packages=["pymavlink"],
+    virtualenv="/opt/boatpi-signal/venv",
+    present=True,
+    _sudo=True,
+).changed
+
+signal_service_changed = files.put(
+    name="Upload signal monitor systemd service",
+    src="configs/signal-monitor.service",
+    dest="/etc/systemd/system/signal-monitor.service",
+    mode="644",
+    _sudo=True,
+).changed
+
+systemd.service(
+    name="Enable and start signal monitor service",
+    service="signal-monitor",
+    running=True,
+    enabled=True,
+    restarted=signal_monitor_updated or venv_created or pymavlink_installed,
+    daemon_reload=signal_service_changed,
     _sudo=True,
 )
