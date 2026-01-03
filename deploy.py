@@ -67,8 +67,25 @@ server.user(
     _sudo=True,
 )
 
+bootconfig_changed = False
+
+bootconfig_changed = bootconfig_changed or files.replace(
+    name="Disable camera auto detection in /boot/firmware/config.txt",
+    path="/boot/firmware/config.txt",
+    text="camera_auto_detect=1",
+    replace="camera_auto_detect=0",
+    _sudo=True,
+).changed
+
+bootconfig_changed = bootconfig_changed or files.line(
+    name="Enable IMX708 Camera in /boot/firmware/config.txt",
+    path="/boot/firmware/config.txt",
+    line="dtoverlay=imx708",
+    _sudo=True,
+).changed
+
 # Disable bluetooth to free up PL011 UART, and ensure its enabled
-bootconfig_changed = files.line(
+bootconfig_changed = bootconfig_changed or files.line(
     name="Disable bluetooth in /boot/firmware/config.txt",
     path="/boot/firmware/config.txt",
     line="dtoverlay=disable-bt",
