@@ -59,6 +59,41 @@ systemd.service(
     _sudo=True,
 )
 
+# Deploy MediaMTX adaptive bitrate controller
+files.directory(
+    name="Create bitrate controller directory",
+    path="/opt/boatpi-qos",
+    mode="755",
+    user=host.get_fact(facts.server.User),
+    _sudo=True,
+)
+
+qos_script_updated = files.put(
+    name="Upload bitrate controller script",
+    src="scripts/stream_qos.py",
+    dest="/opt/boatpi-qos/stream_qos.py",
+    mode="755",
+    _sudo=True,
+).changed
+
+qos_service_changed = files.put(
+    name="Upload bitrate controller systemd service",
+    src="configs/stream-qos.service",
+    dest="/etc/systemd/system/stream-qos.service",
+    mode="644",
+    _sudo=True,
+).changed
+
+systemd.service(
+    name="Enable and start bitrate controller service",
+    service="stream-qos",
+    running=True,
+    enabled=True,
+    restarted=qos_script_updated,
+    daemon_reload=qos_service_changed,
+    _sudo=True,
+)
+
 # Ensure current user is in dialout group for serial port access
 server.user(
     name="Add boatpi user to dialout group",

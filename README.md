@@ -8,6 +8,7 @@ Assumes you already have raspberry pi OS installed and SSH access, nothing else
 ### Features / TODO
 - [X] Setup IMX 708 camera
 - [X] Sets up low latency streaming using mediamtx
+    - [X] Live adjust bit rate to keep ping to client below level
     - [ ] Logs video locally
 - [X] Disables bluetooth to free up PL011 UART for flight controller
 - [X] Sets up mavlink_router

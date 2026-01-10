@@ -1,0 +1,23 @@
+[Unit]
+Description=MediaMTX adaptive bitrate controller
+Requires=network-online.target mediamtx.service
+After=network-online.target mediamtx.service
+
+[Service]
+Type=simple
+ExecStart=/usr/bin/python3 /opt/boatpi-qos/stream_qos.py \
+  --base-url http://127.0.0.1:9997 \
+  --path cam \
+  --target-avg-ms 150 \
+  --min-bitrate 1000000 \
+  --max-bitrate 5000000 \
+  --step-down 500000 \
+  --step-up 250000
+Restart=on-failure
+RestartSec=3
+User=root
+Group=root
+Environment=PYTHONUNBUFFERED=1
+
+[Install]
+WantedBy=multi-user.target

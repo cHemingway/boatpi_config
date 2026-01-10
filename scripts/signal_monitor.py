@@ -209,7 +209,7 @@ def main(argv: Optional[list[str]] = None) -> int:
             rssi = lte_metrics.get("rssi")
             if rssi is not None:
                 sender_lte.send_named_value(f"{args.lte_prefix}rssi", rssi, time_boot_ms)
-                logging.info("LTE metrics: {rssi=}")
+                logging.info("LTE metrics: rssi=%.2f dB", rssi)
 
             if not wifi and rssi is None:
                 logging.info("No Wi-Fi or LTE metrics this cycle")
