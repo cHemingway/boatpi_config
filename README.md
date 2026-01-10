@@ -6,7 +6,7 @@ Likely not useful to anyone as is, but you can use this as inspiration maybe
 Assumes you already have raspberry pi OS installed and SSH access, nothing else
 
 ### Features / TODO
-- [ ] Setup IMX 708 camera
+- [X] Setup IMX 708 camera
 - [X] Sets up low latency streaming using mediamtx
     - [ ] Logs video locally
 - [X] Disables bluetooth to free up PL011 UART for flight controller
