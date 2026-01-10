@@ -236,6 +236,16 @@ if not wwan0_ip:
         _sudo=True,
     )
 
+# Set higher metric on wwan0 to prefer wifi when both are connected
+server.shell(
+    name="Set higher metric on wwan0 interface",
+    commands=[
+        "nmcli connection modify gsm ipv4.route-metric 600",
+        "nmcli connection modify gsm ipv6.route-metric 600",
+    ],
+    _sudo=True,
+)
+
 # Install mosh for better remote connections over LTE
 apt.packages(
     name="Install mosh for better remote connections",

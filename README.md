@@ -14,6 +14,7 @@ Assumes you already have raspberry pi OS installed and SSH access, nothing else
 - [X] Sets up mavlink_router
     - [ ] Turns on local flight logs
 - [X] Sets up 4G Hat
+    - [X] Sets higher metric on 4G connection so WiFi is preferred
 - [X] Publishes Wi-Fi/LTE signal to MAVLink (127.0.0.1:14560)
 - [X] GPIO shutdown by bridging pin 3 to ground
 - [ ] Sets up tailscale for NAT punching
@@ -31,7 +32,6 @@ Assumes you already have raspberry pi OS installed and SSH access, nothing else
 - Or even lower, but a bit glitchier (as `setpts=0` displays frames as soon as it has them, so framerate can be higher than 30fps) `ffplay -flags low_delay -vf setpts=0 -probesize 32 rtsp://<device>:8854/cam`
 
 ### Signal strength -> MAVLink
-
 - A systemd service `signal-monitor.service` polls every ~5s and sends MAVLink `NAMED_VALUE_FLOAT` messages over UDP to `127.0.0.1:14560` (arguments passed directly in the unit ExecStart; see file for overrides).
 - Metrics:
     - `wifi_sig` (0-100% from `nmcli` of the active Wi‑Fi connection)
@@ -44,8 +44,6 @@ Assumes you already have raspberry pi OS installed and SSH access, nothing else
 - Hardcodes APN/DNS instead of using pyinfra data file
 - WebRTC takes a very long time to connect over LTE with tailscale sometimes doesn't work at all
 - Non WebRTC streaming methods have very high (dozens of seconds) of lag
-- LTE is the default route if available even when WiFi comes back, which makes programs that download things (e.g. apt) download over LTE instead which is much slower
-
 
 ### Notes
 - I am using 1password to manage my SSH keys, but this doesn't work so I have to use password auth (specify ssh_password in inventory.py, and enable it on the device). This might be related to https://github.com/paramiko/paramiko/issues/2370 as the error is the same.
