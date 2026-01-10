@@ -14,9 +14,10 @@ Assumes you already have raspberry pi OS installed and SSH access, nothing else
     - [ ] Turns on local flight logs
 - [X] Sets up 4G Hat
 - [X] Publishes Wi-Fi/LTE signal to MAVLink (127.0.0.1:14560)
+- [X] GPIO shutdown by bridging pin 3 to ground
 - [ ] Sets up tailscale for NAT punching
 - [ ] Set most of filesystem to readonly
-- [ ] Add a way of turning off the pi that isn't via SSH, pushbutton?
+
 
 ### Deployment
 - Install pyinfra on your local machine (e.g. `uvx pyinfra`)

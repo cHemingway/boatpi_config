@@ -93,6 +93,13 @@ bootconfig_changed = bootconfig_changed or files.line(
     _sudo=True,
 ).changed
 
+bootconfig_changed = bootconfig_changed or files.line(
+    name="Enable GPIO shutdown on pin 3 in /boot/firmware/config.txt",
+    path="/boot/firmware/config.txt",
+    line="dtoverlay=gpio-shutdown,gpio_pin=3,active_low=1,gpio_pull=up",
+    _sudo=True,
+).changed
+
 if bootconfig_changed:
     server.shell(
     name="Enable serial hardware",
