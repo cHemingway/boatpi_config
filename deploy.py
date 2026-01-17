@@ -34,12 +34,12 @@ if mediamtx_downloaded.changed:
     )
     
 # Update mediamtx configuration
-mediamtx_config_changed = files.put(
+files.put(
     name="Upload mediamtx configuration",
     src="configs/mediamtx.yml",
     dest="/opt/mediamtx/mediamtx.yml",
     mode="644", # Readable by all users
-).changed
+)
 
 # Setup mediamtx as a systemd service
 mediamtx_service_changed = files.put(
@@ -55,7 +55,6 @@ systemd.service(
     service="mediamtx",
     running=True,
     enabled=True,
-    reloaded=mediamtx_config_changed,
     daemon_reload=mediamtx_service_changed,
     _sudo=True,
 )
