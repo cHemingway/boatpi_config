@@ -576,9 +576,9 @@ pathDefaults:
   # Whether this is a secondary stream.
   rpiCameraSecondary: false
   # Width of frames.
-  rpiCameraWidth: 960
+  rpiCameraWidth: 1280
   # Height of frames.
-  rpiCameraHeight: 540
+  rpiCameraHeight: 720
   # Flip horizontally.
   rpiCameraHFlip: false
   # Flip vertically.
@@ -620,7 +620,7 @@ pathDefaults:
   # bit-depth and packing are optional.
   rpiCameraMode:
   # frames per second.
-  rpiCameraFPS: 30
+  rpiCameraFPS: 15
   # Autofocus mode (auto, manual or continuous).
   rpiCameraAfMode: continuous
   # Autofocus range (normal, macro or full).
