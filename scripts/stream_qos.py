@@ -199,7 +199,7 @@ def parse_args(argv: Optional[list[str]] = None) -> argparse.Namespace:
     parser.add_argument("--path", default="cam", help="MediaMTX path to manage")
     parser.add_argument("--target-avg-ms", type=float, default=150.0, help="Target average RTT over window")
     parser.add_argument("--window", type=int, default=5, help="Number of seconds to average")
-    parser.add_argument("--min-bitrate", type=int, default=1_000_000, help="Minimum bitrate (bps)")
+    parser.add_argument("--min-bitrate", type=int, default=500_000, help="Minimum bitrate (bps)")
     parser.add_argument("--max-bitrate", type=int, default=2_500_000, help="Maximum bitrate (bps)")
     parser.add_argument("--step-down", type=int, default=500_000, help="Bitrate decrement when above target (bps)")
     parser.add_argument("--step-up", type=int, default=250_000, help="Bitrate increment when below target (bps)")

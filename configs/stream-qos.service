@@ -9,7 +9,7 @@ ExecStart=/usr/bin/python3 /opt/boatpi-qos/stream_qos.py \
   --base-url http://127.0.0.1:9997 \
   --path cam \
   --target-avg-ms 150 \
-  --min-bitrate 1000000 \
+  --min-bitrate 500000 \
   --max-bitrate 5000000 \
   --step-down 500000 \
   --step-up 250000
