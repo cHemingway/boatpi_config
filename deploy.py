@@ -198,6 +198,14 @@ files.download(
     sha256sum="fad7a5ee509cdcbd1b4569c2d9da356b901f2d521d45c970473ceb6f5b8e0619"
 )
 
+# Ensure log directory exists for mavlink-router flight stack logs
+files.directory(
+    name="Create mavlink-router log directory",
+    path="/var/log/mavlink-router",
+    mode="755",
+    _sudo=True,
+)
+
 # Copy across mavlink-router configuration
 mavlink_config_changed = files.put(
     name="Upload mavlink-router configuration",
