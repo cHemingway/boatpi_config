@@ -50,6 +50,28 @@ mediamtx_service_changed = files.put(
     _sudo=True,
 ).changed
 
+files.directory(
+    name="Ensure systemd drop-in directory for timeouts",
+    path="/etc/systemd/system.conf.d",
+    mode="755",
+    _sudo=True,
+)
+
+systemd_timeout_changed = files.put(
+    name="Shorten systemd default shutdown timeout",
+    src="configs/systemd/boatpi-timeout.conf",
+    dest="/etc/systemd/system.conf.d/boatpi.conf",
+    mode="644",
+    _sudo=True,
+).changed
+
+if systemd_timeout_changed:
+    server.shell(
+        name="Reload systemd manager configuration",
+        commands=["systemctl daemon-reload"],
+        _sudo=True,
+    )
+
 systemd.service(
     name="Enable and start mediamtx service",
     service="mediamtx",

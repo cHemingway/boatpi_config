@@ -17,6 +17,7 @@ Assumes you already have raspberry pi OS installed and SSH access, nothing else
     - [X] Sets higher metric on 4G connection so WiFi is preferred
 - [X] Publishes Wi-Fi/LTE signal to MAVLink (127.0.0.1:14560)
 - [X] GPIO shutdown by bridging pin 3 to ground
+- [X] Speeds up shutdown by limiting process shutdown time to 10 seconds through a systemd manager drop-in (see [configs/systemd/boatpi-timeout.conf](configs/systemd/boatpi-timeout.conf#L1-L2))
 - [ ] Sets up tailscale for NAT punching
 - [ ] Set most of filesystem to readonly
 
@@ -38,7 +39,6 @@ Assumes you already have raspberry pi OS installed and SSH access, nothing else
     - `lte_rssi`, `lte_rsrp`, `lte_rsrq`, `lte_snr` (from `mmcli --signal-get`, in dBm/dB)
 - The service depends on NetworkManager + ModemManager and runs from a venv at `/opt/boatpi-signal/venv` with `pymavlink` installed via pip.
 - On target: `sudo systemctl status signal-monitor` or `journalctl -u signal-monitor -f`.
-
 
 ### Issues
 - Hardcodes APN/DNS instead of using pyinfra data file
