@@ -9,7 +9,7 @@ Assumes you already have raspberry pi OS installed and SSH access, nothing else
 - [X] Setup Arducam IMX 708 camera
 - [X] Sets up low latency streaming using mediamtx
     - [X] Live adjust bit rate to keep ping to client below level via [scripts\stream_qos.py](scripts\stream_qos.py)
-    - [ ] TODO: Save video locally, at full bitrate
+    - [X] Saves high-res (720p) video locally to `/var/log/mediamtx/` while streaming low-res to clients
 - [X] Disables bluetooth to free up PL011 UART for flight controller
 - [X] Sets up mavlink_router to route from UART to UDP/TCP
     - [X] Logs mavlink telemetry locally under `/var/log/mavlink-router`, keeping 2GB of space free
@@ -30,6 +30,8 @@ Assumes you already have raspberry pi OS installed and SSH access, nothing else
 - Run `pyinfra inventory.py deploy.py`
 
 ### Video Playback
+- Live streaming uses the `cam` path (scaled to `853x480` for low latency adaptive bitrate streaming).
+- High resolution recording runs on `cam_record` (`1280x720`) and is saved automatically to `/var/log/mediamtx/` on the pi.
 - For low (ish) latency playback, run `ffplay -fflags nobuffer -framedrop -flags low_delay rtsp://<device_tailscale_address>:8554/cam`
     - This is down to < 1 second over my rural LTE connection, which might be the limit
 - Or even lower, but a bit glitchier (as `setpts=0` displays frames as soon as it has them, so framerate can be higher than 30fps) `ffplay -flags low_delay -vf setpts=0 -probesize 32 rtsp://<device>:8854/cam`
