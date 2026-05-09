@@ -124,12 +124,13 @@ class BitrateController:
         return round(bitrate / self.max_bitrate, 3)
 
     def _reader_ip(self) -> Optional[str]:
-        # Ordered by likely use: RTSP/RTSPS, RTMP, SRT, WebRTC
+        # Ordered by likely use: RTSP/RTSPS, RTMP, SRT, WebRTC, HLS
         endpoints = [
             "/v3/rtspsessions/list",
             "/v3/rtmpconns/list",
             "/v3/srtconns/list",
             "/v3/webrtcsessions/list",
+            "/v3/hlssessions/list",
         ]
         for ep in endpoints:
             data = http_json(self.base_url, ep)
@@ -138,11 +139,12 @@ class BitrateController:
             for item in data.get("items", []):
                 if item.get("path") != self.path:
                     continue
-                if item.get("state") != "read":
+                if "state" in item and item.get("state") != "read":
                     continue
                 ip = parse_remote_ip(item.get("remoteAddr"))
                 if ip:
                     return ip
+
         return None
 
     def _avg_rtt(self) -> Optional[float]:

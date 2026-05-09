@@ -19,9 +19,9 @@ files.directory(
 
 mediamtx_downloaded = files.download(
     name="Download mediamtx binary",
-    src="https://github.com/bluenviron/mediamtx/releases/download/v1.15.3/mediamtx_v1.15.3_linux_arm64.tar.gz",
+    src="https://github.com/bluenviron/mediamtx/releases/download/v1.18.1/mediamtx_v1.18.1_linux_arm64.tar.gz",
     dest="/opt/mediamtx/mediamtx.tar.gz",
-    sha256sum="5f3cb84ef42952a82b1ff5764fd06dc13697d21b06eb179d83663ec55d15ed0c",
+    sha256sum="35fe022ac3aab2c26a97472d715798617b56bdfef6ed3e063e52603896971cf1",
 )
 
 if mediamtx_downloaded.changed:
