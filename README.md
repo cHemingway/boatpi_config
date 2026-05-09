@@ -25,9 +25,20 @@ Assumes you already have raspberry pi OS installed and SSH access, nothing else
 
 
 ### Deployment
-- Install pyinfra on your local machine (e.g. `uvx pyinfra`)
+- Install pyinfra on your local machine (e.g. `uvx pyinfra` or using `uv` with this project's virtual environment)
 - Create an inventory.py of form `hosts=["your_rpi_address"]`
 - Run `pyinfra inventory.py deploy.py`
+- You can pass custom CLI arguments to playbooks using the `--data key=value` flag (e.g., `--data delete_video=true`).
+
+### Fetching Logs and Video
+You can download the latest telemetry (`.tlog`) and video (`.mp4`) from the Pi to your local `/logs` directory, automatically grouped into a folder by date/time:
+```bash
+pyinfra inventory.py get_latest_log.py
+```
+To also delete the video off the Raspberry Pi's SD card after a successful download to save space, run:
+```bash
+pyinfra inventory.py get_latest_log.py --data delete_video=true
+```
 
 ### Video Playback
 - Live streaming uses the `cam` path (scaled to `853x480` for low latency adaptive bitrate streaming).
