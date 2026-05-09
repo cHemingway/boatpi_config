@@ -777,6 +777,7 @@ paths:
     rpiCameraWidth: 1280
     rpiCameraHeight: 720
     rpiCameraFPS: 30
+    rpiCameraMJPEGQuality: 90
     record: yes
     recordPath: /var/log/mediamtx/%path/%Y-%m-%d_%H-%M-%S
 

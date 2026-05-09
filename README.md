@@ -40,9 +40,13 @@ To also delete the video off the Raspberry Pi's SD card after a successful downl
 pyinfra inventory.py get_latest_log.py --data delete_video=true
 ```
 
-### Video Playback
+### Video Playback & Processing
 - Live streaming uses the `cam` path (scaled to `853x480` for low latency adaptive bitrate streaming).
 - High resolution recording runs on `cam_record` (`1280x720`) and is saved automatically to `/var/log/mediamtx/` on the pi.
+- The `cam_record` video uses the MJPEG codec. To re-encode the downloaded `.mp4` into a Youtube-friendly H.264 format with a good balance of quality and size, you can run:
+  ```bash
+  ffmpeg -i input.mp4 -c:v libx264 -crf 21 -preset slow -pix_fmt yuv420p -an output_h264.mp4
+  ```
 - For low (ish) latency playback, run `ffplay -fflags nobuffer -framedrop -flags low_delay rtsp://<device_tailscale_address>:8554/cam`
     - This is down to < 1 second over my rural LTE connection, which might be the limit
 - Or even lower, but a bit glitchier (as `setpts=0` displays frames as soon as it has them, so framerate can be higher than 30fps) `ffplay -flags low_delay -vf setpts=0 -probesize 32 rtsp://<device>:8854/cam`
