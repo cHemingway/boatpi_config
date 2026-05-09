@@ -152,7 +152,7 @@ apiServerKey: server.key
 # Path to the server certificate.
 apiServerCert: server.crt
 # Value of the Access-Control-Allow-Origin header provided in every HTTP response.
-apiAllowOrigins: ['*']
+apiAllowOrigin: '*'
 # List of IPs or CIDRs of proxies placed before the HTTP server.
 # If the server receives a request from one of these entries, IP in logs
 # will be taken from the X-Forwarded-For header.
@@ -175,7 +175,7 @@ metricsServerKey: server.key
 # Path to the server certificate.
 metricsServerCert: server.crt
 # Value of the Access-Control-Allow-Origin header provided in every HTTP response.
-metricsAllowOrigins: ['*']
+metricsAllowOrigin: '*'
 # List of IPs or CIDRs of proxies placed before the HTTP server.
 # If the server receives a request from one of these entries, IP in logs
 # will be taken from the X-Forwarded-For header.
@@ -198,7 +198,7 @@ pprofServerKey: server.key
 # Path to the server certificate.
 pprofServerCert: server.crt
 # Value of the Access-Control-Allow-Origin header provided in every HTTP response.
-pprofAllowOrigins: ['*']
+pprofAllowOrigin: '*'
 # List of IPs or CIDRs of proxies placed before the HTTP server.
 # If the server receives a request from one of these entries, IP in logs
 # will be taken from the X-Forwarded-For header.
@@ -221,7 +221,7 @@ playbackServerKey: server.key
 # Path to the server certificate.
 playbackServerCert: server.crt
 # Value of the Access-Control-Allow-Origin header provided in every HTTP response.
-playbackAllowOrigins: ['*']
+playbackAllowOrigin: '*'
 # List of IPs or CIDRs of proxies placed before the HTTP server.
 # If the server receives a request from one of these entries, IP in logs
 # will be taken from the X-Forwarded-For header.
@@ -318,7 +318,7 @@ hlsServerKey: server.key
 hlsServerCert: server.crt
 # Value of the Access-Control-Allow-Origin header provided in every HTTP response.
 # This allows to play the HLS stream from an external website.
-hlsAllowOrigins: ['*']
+hlsAllowOrigin: '*'
 # List of IPs or CIDRs of proxies placed before the HLS server.
 # If the server receives a request from one of these entries, IP in logs
 # will be taken from the X-Forwarded-For header.
@@ -376,7 +376,7 @@ webrtcServerKey: server.key
 webrtcServerCert: server.crt
 # Value of the Access-Control-Allow-Origin header provided in every HTTP response.
 # This allows to play the WebRTC stream from an external website.
-webrtcAllowOrigins: ['*']
+webrtcAllowOrigin: '*'
 # List of IPs or CIDRs of proxies placed before the WebRTC server.
 # If the server receives a request from one of these entries, IP in logs
 # will be taken from the X-Forwarded-For header.

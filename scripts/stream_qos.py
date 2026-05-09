@@ -130,7 +130,7 @@ class BitrateController:
             "/v3/rtmpconns/list",
             "/v3/srtconns/list",
             "/v3/webrtcsessions/list",
-            "/v3/hlssessions/list",
+            "/v3/hlsmuxers/list",
         ]
         for ep in endpoints:
             data = http_json(self.base_url, ep)
