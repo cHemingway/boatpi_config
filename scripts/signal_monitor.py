@@ -131,7 +131,7 @@ def get_wifi_signal() -> Optional[WifiSignal]:
 
 def enable_modem_signal_monitoring(modem_selector: str) -> None:
     try:
-        run_command(["mmcli", "-m", modem_selector, "--signal-setup=1", "--timeout", "10", "-K"], timeout=12)
+        run_command(["mmcli", "-m", modem_selector, "--signal-setup=1", "--timeout", "10"], timeout=12)
     except Exception as exc:
         # Often harmless if already enabled or modem absent
         logging.info("mmcli signal setup skipped: %s", exc)
